@@ -131,6 +131,9 @@ namespace MinecraftClient.Protocol
                         return 108;
                     case "1.9.2":
                         return 109;
+					case "1.9.3-pre2":
+					case "1.9.3-pre3":
+						return 110;
                     default:
                         return 0;
                 }
