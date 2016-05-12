@@ -76,7 +76,7 @@ namespace MinecraftClient.Protocol.Handlers
             catch (SocketException) { }
             catch (ObjectDisposedException) { }
 
-            handler.OnConnectionLost(ChatBot.DisconnectReason.ConnectionLost, "");
+			handler.OnConnectionLost(Bot.Bot.DisconnectReason.ConnectionLost, "");
         }
 
         /// <summary>
@@ -552,7 +552,7 @@ namespace MinecraftClient.Protocol.Handlers
 
                     return false;
                 case PacketIncomingType.KickPacket:
-                    handler.OnConnectionLost(ChatBot.DisconnectReason.InGameKick, ChatParser.ParseText(readNextString(packetData)));
+					handler.OnConnectionLost(Bot.Bot.DisconnectReason.InGameKick, ChatParser.ParseText(readNextString(packetData)));
                     return false;
                 case PacketIncomingType.NetworkCompressionTreshold:
                     if (protocolversion >= MC18Version && protocolversion < MC19Version)
@@ -1081,7 +1081,7 @@ namespace MinecraftClient.Protocol.Handlers
                 readNextPacket(ref packetID, packetData);
                 if (packetID == 0x00) //Login rejected
                 {
-                    handler.OnConnectionLost(ChatBot.DisconnectReason.LoginRejected, ChatParser.ParseText(readNextString(packetData)));
+					handler.OnConnectionLost(Bot.Bot.DisconnectReason.LoginRejected, ChatParser.ParseText(readNextString(packetData)));
                     return false;
                 }
                 else if (packetID == 0x01) //Encryption request
@@ -1127,7 +1127,7 @@ namespace MinecraftClient.Protocol.Handlers
 
                 if (packetID == 0x40) // Disconnect
                 {
-                    handler.OnConnectionLost(ChatBot.DisconnectReason.LoginRejected, ChatParser.ParseText(readNextString(packetData)));
+					handler.OnConnectionLost(Bot.Bot.DisconnectReason.LoginRejected, ChatParser.ParseText(readNextString(packetData)));
                     return false;
                 }
                 else
@@ -1157,7 +1157,7 @@ namespace MinecraftClient.Protocol.Handlers
                 Console.WriteLine("Checking Session...");
                 if (!ProtocolHandler.SessionCheck(uuid, sessionID, CryptoHandler.getServerHash(serverIDhash, serverKey, secretKey)))
                 {
-                    handler.OnConnectionLost(ChatBot.DisconnectReason.LoginRejected, "Failed to check session.");
+					handler.OnConnectionLost(Bot.Bot.DisconnectReason.LoginRejected, "Failed to check session.");
                     return false;
                 }
             }
@@ -1181,7 +1181,7 @@ namespace MinecraftClient.Protocol.Handlers
                 readNextPacket(ref packetID, packetData);
                 if (packetID == 0x00) //Login rejected
                 {
-                    handler.OnConnectionLost(ChatBot.DisconnectReason.LoginRejected, ChatParser.ParseText(readNextString(packetData)));
+					handler.OnConnectionLost(Bot.Bot.DisconnectReason.LoginRejected, ChatParser.ParseText(readNextString(packetData)));
                     return false;
                 }
                 else if (packetID == 0x02) //Login successful

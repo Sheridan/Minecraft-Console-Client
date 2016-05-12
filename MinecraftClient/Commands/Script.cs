@@ -14,7 +14,7 @@ namespace MinecraftClient.Commands
         {
             if (hasArg(command))
             {
-                handler.BotLoad(new ChatBots.Script(getArg(command)));
+				handler.BotLoad(new MinecraftClient.Bots.Script(getArg(command)));
                 return "";
             }
             else return CMDDesc;

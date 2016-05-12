@@ -3,12 +3,12 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace MinecraftClient.ChatBots
+namespace MinecraftClient.Bots
 {
     /// <summary>
     /// This bot automatically runs actions when a user sends a message matching a specified rule
     /// </summary>
-    class AutoRespond : ChatBot
+	class AutoRespond : Bot.Bot
     {
         private string matchesFile;
         private List<RespondRule> respondRules;
@@ -20,6 +20,8 @@ namespace MinecraftClient.ChatBots
         /// <param name="matchesFile">INI File to load matches from</param>
         public AutoRespond(string matchesFile)
         {
+			onInitialize += Initialize;
+			onTextRecieved += GetText;
             this.matchesFile = matchesFile;
         }
 
@@ -112,7 +114,7 @@ namespace MinecraftClient.ChatBots
         /// <summary>
         /// Initialize the AutoRespond bot from the matches file
         /// </summary>
-        public override void Initialize()
+        public void Initialize()
         {
             if (File.Exists(matchesFile))
             {
@@ -191,7 +193,7 @@ namespace MinecraftClient.ChatBots
             }
         }
 
-        public override void GetText(string text)
+        public void GetText(string text)
         {
             //Remove colour codes
             text = GetVerbatim(text);

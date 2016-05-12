@@ -64,7 +64,7 @@ namespace MinecraftClient.Protocol
         /// This method is called when the connection has been lost
         /// </summary>
 
-        void OnConnectionLost(ChatBot.DisconnectReason reason, string message);
+		void OnConnectionLost(Bot.Bot.DisconnectReason reason, string message);
 
         /// <summary>
         /// Called ~10 times per second (10 ticks per second)
@@ -79,7 +79,7 @@ namespace MinecraftClient.Protocol
         /// <param name="channel">The channel to register.</param>
         /// <param name="bot">The bot to register the channel for.</param>
 
-        void RegisterPluginChannel(string channel, ChatBot bot);
+		void RegisterPluginChannel(string channel, Bot.Bot bot);
 
         /// <summary>
         /// Unregisters the given plugin channel for the given bot.
@@ -87,7 +87,7 @@ namespace MinecraftClient.Protocol
         /// <param name="channel">The channel to unregister.</param>
         /// <param name="bot">The bot to unregister the channel for.</param>
 
-        void UnregisterPluginChannel(string channel, ChatBot bot);
+		void UnregisterPluginChannel(string channel, Bot.Bot bot);
 
         /// <summary>
         /// Sends a plugin channel packet to the server.

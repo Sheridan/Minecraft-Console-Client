@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace MinecraftClient.ChatBots
+namespace MinecraftClient.Bots
 {
     /// <summary>
     /// This bot saves the received messages in a text file.
     /// </summary>
 
-    public class ChatLog : ChatBot
+	public class ChatLog : Bot.Bot
     {
         public enum MessageFilter { AllText, AllMessages, OnlyChat, OnlyWhispers };
         private bool dateandtime;
@@ -28,6 +28,7 @@ namespace MinecraftClient.ChatBots
 
         public ChatLog(string file, MessageFilter filter, bool AddDateAndTime)
         {
+			onTextRecieved += GetText;
             dateandtime = AddDateAndTime;
             logfile = file;
             switch (filter)
@@ -67,7 +68,7 @@ namespace MinecraftClient.ChatBots
             }
         }
 
-        public override void GetText(string text)
+        public void GetText(string text)
         {
             text = GetVerbatim(text);
             string sender = "";

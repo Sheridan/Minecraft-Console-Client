@@ -61,7 +61,7 @@ namespace MinecraftClient.Protocol.Handlers
             catch (SocketException) { }
             catch (ObjectDisposedException) { }
 
-            handler.OnConnectionLost(ChatBot.DisconnectReason.ConnectionLost, "");
+			handler.OnConnectionLost(Bot.Bot.DisconnectReason.ConnectionLost, "");
         }
 
         private bool Update()
@@ -175,7 +175,7 @@ namespace MinecraftClient.Protocol.Handlers
                     handler.OnPluginChannelMessage(channel, payload);
                     break;
                 case 0xFF: string reason = readNextString();
-                    handler.OnConnectionLost(ChatBot.DisconnectReason.InGameKick, reason); break;
+					handler.OnConnectionLost(Bot.Bot.DisconnectReason.InGameKick, reason); break;
                 default: return false; //unknown packet!
             }
             return true; //packet has been successfully skipped
@@ -537,7 +537,7 @@ namespace MinecraftClient.Protocol.Handlers
                             else if (pid[0] == (byte)0xFF)
                             {
                                 string reason = readNextString();
-                                handler.OnConnectionLost(ChatBot.DisconnectReason.LoginRejected, reason);
+								handler.OnConnectionLost(Bot.Bot.DisconnectReason.LoginRejected, reason);
                                 return false;
                             }
                         }
@@ -550,7 +550,7 @@ namespace MinecraftClient.Protocol.Handlers
                 }
                 catch
                 {
-                    handler.OnConnectionLost(ChatBot.DisconnectReason.ConnectionLost, "");
+					handler.OnConnectionLost(Bot.Bot.DisconnectReason.ConnectionLost, "");
                     return false;
                 }
                 return false; //Login was unsuccessful (received a kick...)

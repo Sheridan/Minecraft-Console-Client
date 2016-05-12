@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MinecraftClient.ChatBots
+namespace MinecraftClient.Bots
 {
     /// <summary>
     /// This bot sends a command every 60 seconds in order to stay non-afk.
     /// </summary>
 
-    public class AntiAFK : ChatBot
+	public class AntiAFK : Bot.Bot
     {
         private int count;
         private int timeping;
@@ -21,12 +21,13 @@ namespace MinecraftClient.ChatBots
 
         public AntiAFK(int pingparam)
         {
+			onUpdate += Update;
             count = 0;
             timeping = pingparam;
             if (timeping < 10) { timeping = 10; } //To avoid flooding
         }
 
-        public override void Update()
+        public void Update()
         {
             count++;
             if (count == timeping)

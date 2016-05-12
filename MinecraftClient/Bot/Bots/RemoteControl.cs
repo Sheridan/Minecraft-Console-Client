@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MinecraftClient.ChatBots
+namespace MinecraftClient.Bots
 {
     /// <summary>
     /// Allow to perform operations using whispers to the bot
     /// </summary>
 
-    public class RemoteControl : ChatBot
+	public class RemoteControl : Bot.Bot
     {
-        public override void GetText(string text)
+		public RemoteControl()
+		{
+			onTextRecieved += GetText;
+		}
+
+        public void GetText(string text)
         {
             text = GetVerbatim(text);
             string command = "", sender = "";

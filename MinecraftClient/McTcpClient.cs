@@ -25,19 +25,21 @@ namespace MinecraftClient
         private static readonly Dictionary<string, Command> cmds = new Dictionary<string, Command>();
         private readonly Dictionary<Guid, string> onlinePlayers = new Dictionary<Guid, string>();
 
-        private readonly List<ChatBot> bots = new List<ChatBot>();
-        private static readonly List<ChatBots.Script> scripts_on_hold = new List<ChatBots.Script>();
-        public void BotLoad(ChatBot b) {
+		private readonly List<Bot.Bot> bots = new List<Bot.Bot>();
+		private static readonly List<MinecraftClient.Bots.Script> scripts_on_hold = new List<MinecraftClient.Bots.Script>();
+		public void BotLoad(Bot.Bot b) 
+		{
             b.SetHandler(this);
             bots.Add(b);
-            b.Initialize();
-            if (this.handler != null)
+			b.doInitialize ();
+			if (this.handler != null)
             {
-                b.AfterGameJoined();
+				b.doGameJoin ();
             }
             Settings.SingleCommand = "";
         }
-        public void BotUnLoad(ChatBot b) {
+		public void BotUnLoad(Bot.Bot b) 
+		{
             bots.RemoveAll(item => object.ReferenceEquals(item, b));
 
             // ToList is needed to avoid an InvalidOperationException from modfiying the list while it's being iterated upon.
@@ -49,7 +51,7 @@ namespace MinecraftClient
         }
         public void BotClear() { bots.Clear(); }
 
-        private readonly Dictionary<string, List<ChatBot>> registeredBotPluginChannels = new Dictionary<string, List<ChatBot>>();
+		private readonly Dictionary<string, List<Bot.Bot>> registeredBotPluginChannels = new Dictionary<string, List<Bot.Bot>>();
         private readonly List<string> registeredServerPluginChannels = new List<String>();
 
         private object locationLock = new object();
@@ -131,15 +133,15 @@ namespace MinecraftClient
 
             if (!singlecommand)
             {
-                if (Settings.AntiAFK_Enabled) { BotLoad(new ChatBots.AntiAFK(Settings.AntiAFK_Delay)); }
-                if (Settings.Hangman_Enabled) { BotLoad(new ChatBots.HangmanGame(Settings.Hangman_English)); }
-                if (Settings.Alerts_Enabled) { BotLoad(new ChatBots.Alerts()); }
-                if (Settings.ChatLog_Enabled) { BotLoad(new ChatBots.ChatLog(Settings.ExpandVars(Settings.ChatLog_File), Settings.ChatLog_Filter, Settings.ChatLog_DateTime)); }
-                if (Settings.PlayerLog_Enabled) { BotLoad(new ChatBots.PlayerListLogger(Settings.PlayerLog_Delay, Settings.ExpandVars(Settings.PlayerLog_File))); }
-                if (Settings.AutoRelog_Enabled) { BotLoad(new ChatBots.AutoRelog(Settings.AutoRelog_Delay, Settings.AutoRelog_Retries)); }
-                if (Settings.ScriptScheduler_Enabled) { BotLoad(new ChatBots.ScriptScheduler(Settings.ExpandVars(Settings.ScriptScheduler_TasksFile))); }
-                if (Settings.RemoteCtrl_Enabled) { BotLoad(new ChatBots.RemoteControl()); }
-                if (Settings.AutoRespond_Enabled) { BotLoad(new ChatBots.AutoRespond(Settings.AutoRespond_Matches)); }
+                if (Settings.AntiAFK_Enabled) { BotLoad(new MinecraftClient.Bots.AntiAFK(Settings.AntiAFK_Delay)); }
+                if (Settings.Hangman_Enabled) { BotLoad(new MinecraftClient.Bots.HangmanGame(Settings.Hangman_English)); }
+                if (Settings.Alerts_Enabled) { BotLoad(new MinecraftClient.Bots.Alerts()); }
+                if (Settings.ChatLog_Enabled) { BotLoad(new MinecraftClient.Bots.ChatLog(Settings.ExpandVars(Settings.ChatLog_File), Settings.ChatLog_Filter, Settings.ChatLog_DateTime)); }
+                if (Settings.PlayerLog_Enabled) { BotLoad(new MinecraftClient.Bots.PlayerListLogger(Settings.PlayerLog_Delay, Settings.ExpandVars(Settings.PlayerLog_File))); }
+                if (Settings.AutoRelog_Enabled) { BotLoad(new MinecraftClient.Bots.AutoRelog(Settings.AutoRelog_Delay, Settings.AutoRelog_Retries)); }
+                if (Settings.ScriptScheduler_Enabled) { BotLoad(new MinecraftClient.Bots.ScriptScheduler(Settings.ExpandVars(Settings.ScriptScheduler_TasksFile))); }
+                if (Settings.RemoteCtrl_Enabled) { BotLoad(new MinecraftClient.Bots.RemoteControl()); }
+                if (Settings.AutoRespond_Enabled) { BotLoad(new MinecraftClient.Bots.AutoRespond(Settings.AutoRespond_Matches)); }
             }
 
             try
@@ -163,7 +165,7 @@ namespace MinecraftClient
                         }
                         else
                         {
-                            foreach (ChatBot bot in scripts_on_hold)
+							foreach (Bot.Bot bot in scripts_on_hold)
                                 bot.SetHandler(this);
                             bots.AddRange(scripts_on_hold);
                             scripts_on_hold.Clear();
@@ -333,9 +335,9 @@ namespace MinecraftClient
 
         public void Disconnect()
         {
-            foreach (ChatBot bot in bots)
-                if (bot is ChatBots.Script)
-                    scripts_on_hold.Add((ChatBots.Script)bot);
+			foreach (Bot.Bot bot in bots)
+                if (bot is MinecraftClient.Bots.Script)
+                    scripts_on_hold.Add((MinecraftClient.Bots.Script)bot);
 
             if (handler != null)
             {
@@ -360,8 +362,8 @@ namespace MinecraftClient
         {
             if (!String.IsNullOrWhiteSpace(Settings.BrandInfo))
                 handler.SendBrandInfo(Settings.BrandInfo.Trim());
-            foreach (ChatBot bot in bots)
-                bot.AfterGameJoined();
+			foreach (Bot.Bot bot in bots)
+				bot.doGameJoin ();
         }
 
         /// <summary>
@@ -425,7 +427,7 @@ namespace MinecraftClient
             {
                 try
                 {
-                    bots[i].GetText(text);
+					bots[i].doTextRecieve(text);
                 }
                 catch (Exception e)
                 {
@@ -442,30 +444,30 @@ namespace MinecraftClient
         /// When connection has been lost
         /// </summary>
 
-        public void OnConnectionLost(ChatBot.DisconnectReason reason, string message)
+		public void OnConnectionLost(Bot.Bot.DisconnectReason reason, string message)
         {
             bool will_restart = false;
 
             switch (reason)
             {
-                case ChatBot.DisconnectReason.ConnectionLost:
+				case Bot.Bot.DisconnectReason.ConnectionLost:
                     message = "Connection has been lost.";
                     ConsoleIO.WriteLine(message);
                     break;
 
-                case ChatBot.DisconnectReason.InGameKick:
+				case Bot.Bot.DisconnectReason.InGameKick:
                     ConsoleIO.WriteLine("Disconnected by Server :");
                     ConsoleIO.WriteLineFormatted(message);
                     break;
 
-                case ChatBot.DisconnectReason.LoginRejected:
+				case Bot.Bot.DisconnectReason.LoginRejected:
                     ConsoleIO.WriteLine("Login failed :");
                     ConsoleIO.WriteLineFormatted(message);
                     break;
             }
 
-            foreach (ChatBot bot in bots)
-                will_restart |= bot.OnDisconnect(reason, message);
+			foreach (Bot.Bot bot in bots)
+				will_restart |= bot.doDisconnect(reason, message);
 
             if (!will_restart)
                 Program.HandleFailure();
@@ -481,7 +483,7 @@ namespace MinecraftClient
             {
                 try
                 {
-                    bot.Update();
+					bot.doUpdate();
                     bot.ProcessQueuedText();
                 }
                 catch (Exception e)
@@ -603,7 +605,7 @@ namespace MinecraftClient
         /// <param name="channel">The channel to register.</param>
         /// <param name="bot">The bot to register the channel for.</param>
 
-        public void RegisterPluginChannel(string channel, ChatBot bot)
+		public void RegisterPluginChannel(string channel, Bot.Bot bot)
         {
             if (registeredBotPluginChannels.ContainsKey(channel))
             {
@@ -611,7 +613,7 @@ namespace MinecraftClient
             }
             else
             {
-                List<ChatBot> bots = new List<ChatBot>();
+				List<Bot.Bot> bots = new List<Bot.Bot>();
                 bots.Add(bot);
                 registeredBotPluginChannels[channel] = bots;
                 SendPluginChannelMessage("REGISTER", Encoding.UTF8.GetBytes(channel), true);
@@ -624,11 +626,11 @@ namespace MinecraftClient
         /// <param name="channel">The channel to unregister.</param>
         /// <param name="bot">The bot to unregister the channel for.</param>
 
-        public void UnregisterPluginChannel(string channel, ChatBot bot)
+		public void UnregisterPluginChannel(string channel, Bot.Bot bot)
         {
             if (registeredBotPluginChannels.ContainsKey(channel))
             {
-                List<ChatBot> registeredBots = registeredBotPluginChannels[channel];
+				List<Bot.Bot> registeredBots = registeredBotPluginChannels[channel];
                 registeredBots.RemoveAll(item => object.ReferenceEquals(item, bot));
                 if (registeredBots.Count == 0)
                 {
@@ -693,9 +695,9 @@ namespace MinecraftClient
 
             if (registeredBotPluginChannels.ContainsKey(channel))
             {
-                foreach (ChatBot bot in registeredBotPluginChannels[channel])
+				foreach (Bot.Bot bot in registeredBotPluginChannels[channel])
                 {
-                    bot.OnPluginMessage(channel, data);
+					bot.doPluginMessage(channel, data);
                 }
             }
         }

@@ -73,18 +73,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoTimeout.cs" />
-    <Compile Include="ChatBots\Alerts.cs" />
-    <Compile Include="ChatBots\AntiAFK.cs" />
-    <Compile Include="ChatBots\AutoRespond.cs" />
-    <Compile Include="ChatBots\AutoRelog.cs" />
-    <Compile Include="ChatBots\ChatLog.cs" />
-    <Compile Include="ChatBots\HangmanGame.cs" />
-    <Compile Include="ChatBots\PlayerListLogger.cs" />
-    <Compile Include="ChatBots\RemoteControl.cs" />
-    <Compile Include="ChatBots\Script.cs" />
-    <Compile Include="ChatBots\ScriptScheduler.cs" />
-    <Compile Include="ChatBots\TestBot.cs" />
-    <Compile Include="ChatBot.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="Commands\Connect.cs" />
     <Compile Include="Commands\Move.cs" />
@@ -165,6 +153,21 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Commands\List.cs" />
     <Compile Include="Mapping\Location.cs" />
+    <Compile Include="Bot\Bots\Alerts.cs" />
+    <Compile Include="Bot\Bots\AntiAFK.cs" />
+    <Compile Include="Bot\Bots\AutoRelog.cs" />
+    <Compile Include="Bot\Bots\AutoRespond.cs" />
+    <Compile Include="Bot\Bots\ChatLog.cs" />
+    <Compile Include="Bot\Bots\HangmanGame.cs" />
+    <Compile Include="Bot\Bots\PlayerListLogger.cs" />
+    <Compile Include="Bot\Bots\RemoteControl.cs" />
+    <Compile Include="Bot\Bots\Script.cs" />
+    <Compile Include="Bot\Bots\ScriptScheduler.cs" />
+    <Compile Include="Bot\Bots\TestBot.cs" />
+    <Compile Include="Bot\Base.cs" />
+    <Compile Include="Bot\Chat.cs" />
+    <Compile Include="Bot\WorldInteraction.cs" />
+    <Compile Include="Bot\Events.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
@@ -199,4 +202,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Bot\" />
+  </ItemGroup>
 </Project>

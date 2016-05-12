@@ -7,13 +7,13 @@ using Microsoft.CSharp;
 using System.CodeDom.Compiler;
 using System.Reflection;
 
-namespace MinecraftClient.ChatBots
+namespace MinecraftClient.Bots
 {
     /// <summary>
     /// Runs a list of commands
     /// </summary>
 
-    public class Script : ChatBot
+	public class Script : Bot.Bot
     {
         private string file;
         private string[] lines = new string[0];
@@ -27,6 +27,8 @@ namespace MinecraftClient.ChatBots
 
         public Script(string filename)
         {
+			onInitialize += Initialize;
+			onUpdate += Update;
             ParseArguments(filename);
         }
 
@@ -111,7 +113,7 @@ namespace MinecraftClient.ChatBots
             return false;
         }
 
-        public override void Initialize()
+        public void Initialize()
         {
             //Load the given file from the startup parameters
             if (LookForScript(ref file))
@@ -134,7 +136,7 @@ namespace MinecraftClient.ChatBots
             }
         }
 
-        public override void Update()
+        public void Update()
         {
             if (csharp) //C# compiled script
             {

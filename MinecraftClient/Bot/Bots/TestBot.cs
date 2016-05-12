@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MinecraftClient.ChatBots
+namespace MinecraftClient.Bots
 {
     /// <summary>
     /// Example of message receiving.
     /// </summary>
 
-    public class TestBot : ChatBot
+	public class TestBot : Bot.Bot
     {
-        public override void GetText(string text)
+		public TestBot()
+		{
+			onTextRecieved += GetText;
+		}
+
+        public void GetText(string text)
         {
             string message = "";
             string username = "";

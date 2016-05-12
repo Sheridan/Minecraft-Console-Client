@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 
-namespace MinecraftClient.ChatBots
+namespace MinecraftClient.Bots
 {
     /// <summary>
     /// Trigger scripts on specific events
     /// </summary>
 
-    public class ScriptScheduler : ChatBot
+	public class ScriptScheduler : Bot.Bot
     {
         private class TaskDesc
         {
@@ -35,11 +35,13 @@ namespace MinecraftClient.ChatBots
 
         public ScriptScheduler(string tasksfile)
         {
+			onInitialize += Initialize;
+			onUpdate += Update;
             this.tasksfile = tasksfile;
             serverlogin_done = false;
         }
 
-        public override void Initialize()
+        public void Initialize()
         {
             //Load the given file from the startup parameters
             if (System.IO.File.Exists(tasksfile))
@@ -106,7 +108,7 @@ namespace MinecraftClient.ChatBots
             }
         }
 
-        public override void Update()
+        public void Update()
         {
             if (verifytasks_timeleft <= 0)
             {

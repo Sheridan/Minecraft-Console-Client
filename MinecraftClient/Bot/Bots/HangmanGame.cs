@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MinecraftClient.ChatBots
+namespace MinecraftClient.Bots
 {
     /// <summary>
     /// In-Chat Hangman game
     /// </summary>
 
-    public class HangmanGame : ChatBot
+	public class HangmanGame : Bot.Bot
     {
         private int vie = 0;
         private int vie_param = 10;
@@ -28,10 +28,12 @@ namespace MinecraftClient.ChatBots
 
         public HangmanGame(bool english)
         {
+			onUpdate += Update;
+			onTextRecieved += GetText;
             English = english;
         }
 
-        public override void Update()
+        public void Update()
         {
             if (running)
             {
@@ -48,7 +50,7 @@ namespace MinecraftClient.ChatBots
             }
         }
 
-        public override void GetText(string text)
+        public void GetText(string text)
         {
             string message = "";
             string username = "";

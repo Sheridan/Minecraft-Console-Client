@@ -219,7 +219,7 @@ namespace MinecraftClient
                     Console.WriteLine("Retrieving Server Info...");
                     if (!ProtocolHandler.GetServerInfo(Settings.ServerIP, Settings.ServerPort, ref protocolversion, ref forgeInfo))
                     {
-                        HandleFailure("Failed to ping this IP.", true, ChatBots.AutoRelog.DisconnectReason.ConnectionLost);
+                        HandleFailure("Failed to ping this IP.", true, MinecraftClient.Bots.AutoRelog.DisconnectReason.ConnectionLost);
                         return;
                     }
                 }
@@ -264,7 +264,7 @@ namespace MinecraftClient
                         + '\n' + "mozroots --import --ask-remove");
                     return;
                 }
-                HandleFailure(failureMessage, false, ChatBot.DisconnectReason.LoginRejected);
+				HandleFailure(failureMessage, false, Bot.Bot.DisconnectReason.LoginRejected);
             }
         }
 
@@ -306,7 +306,7 @@ namespace MinecraftClient
         /// <param name="versionError">Specify if the error is related to an incompatible or unkown server version</param>
         /// <param name="disconnectReason">If set, the error message will be processed by the AutoRelog bot</param>
 
-        public static void HandleFailure(string errorMessage = null, bool versionError = false, ChatBots.AutoRelog.DisconnectReason? disconnectReason = null)
+		public static void HandleFailure(string errorMessage = null, bool versionError = false, MinecraftClient.Bots.AutoRelog.DisconnectReason? disconnectReason = null)
         {
             if (!String.IsNullOrEmpty(errorMessage))
             {
@@ -317,7 +317,7 @@ namespace MinecraftClient
 
                 if (disconnectReason.HasValue)
                 {
-                    if (ChatBots.AutoRelog.OnDisconnectStatic(disconnectReason.Value, errorMessage))
+                    if (MinecraftClient.Bots.AutoRelog.OnDisconnectStatic(disconnectReason.Value, errorMessage))
                         return; //AutoRelog is triggering a restart of the client
                 }
             }

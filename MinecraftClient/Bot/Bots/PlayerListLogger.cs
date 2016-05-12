@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MinecraftClient.ChatBots
+namespace MinecraftClient.Bots
 {
     /// <summary>
     /// This bot sends a /list command every X seconds and save the result.
     /// </summary>
 
-    public class PlayerListLogger : ChatBot
+	public class PlayerListLogger : Bot.Bot
     {
         private int count;
         private int timeping;
@@ -22,6 +22,8 @@ namespace MinecraftClient.ChatBots
 
         public PlayerListLogger(int pingparam, string filetosavein)
         {
+			onUpdate += Update;
+			onTextRecieved += GetText;
             count = 0;
             file = filetosavein;
             timeping = pingparam;
@@ -29,7 +31,7 @@ namespace MinecraftClient.ChatBots
 
         }
 
-        public override void Update()
+        public void Update()
         {
             count++;
             if (count == timeping)
@@ -39,7 +41,7 @@ namespace MinecraftClient.ChatBots
             }
         }
 
-        public override void GetText(string text)
+        public void GetText(string text)
         {
             if (text.Contains("Joueurs en ligne") || text.Contains("Connected:") || text.Contains("online:"))
             {

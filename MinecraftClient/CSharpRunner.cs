@@ -27,7 +27,7 @@ namespace MinecraftClient
         /// <param name="run">Set to false to compile and cache the script without launching it</param>
         /// <exception cref="CSharpException">Thrown if an error occured</exception>
         /// <returns>Result of the execution, returned by the script</returns>
-        public static object Run(ChatBot apiHandler, ManualResetEvent tickHandler, string[] lines, string[] args, bool run = true)
+		public static object Run(Bot.Bot apiHandler, ManualResetEvent tickHandler, string[] lines, string[] args, bool run = true)
         {
             //Script compatibility check for handling future versions differently
             if (lines.Length < 1 || lines[0] != "//MCCScript 1.0")
@@ -178,7 +178,7 @@ namespace MinecraftClient
     /// <summary>
     /// Represents the C# API object accessible from C# Scripts
     /// </summary>
-    public class CSharpAPI : ChatBot
+	public class CSharpAPI : Bot.Bot
     {
         /// <summary>
         /// Thread blocking utility for stopping execution when making a ChatBot API call
@@ -190,13 +190,13 @@ namespace MinecraftClient
         /// </summary>
         /// <param name="apiHandler">ChatBot API Handler</param>
         /// <param name="tickHandler">ChatBot tick handler</param>
-        public CSharpAPI(ChatBot apiHandler, ManualResetEvent tickHandler)
+		public CSharpAPI(Bot.Bot apiHandler, ManualResetEvent tickHandler)
         {
             SetMaster(apiHandler);
             this.tickHandler = tickHandler;
         }
 
-        /* == Wrappers for ChatBot API with public visibility and call limit to one per tick for safety == */
+		/* == Wrappers for Bot.Bot API with public visibility and call limit to one per tick for safety == */
 
         /// <summary>
         /// Write some text in the console. Nothing will be sent to the server.
@@ -258,7 +258,7 @@ namespace MinecraftClient
         /// Load the provided ChatBot object
         /// </summary>
         /// <param name="bot">Bot to load</param>
-        new public void LoadBot(ChatBot bot)
+		new public void LoadBot(Bot.Bot bot)
         {
             base.LoadBot(bot);
             tickHandler.WaitOne();
@@ -365,7 +365,7 @@ namespace MinecraftClient
         public object CallScript(string script, string[] args)
         {
             string[] lines = null;
-            ChatBots.Script.LookForScript(ref script);
+			MinecraftClient.Bots.Script.LookForScript(ref script);
             try { lines = File.ReadAllLines(script); }
             catch (Exception e) { throw new CSharpException(CSErrorType.FileReadError, e); }
             return CSharpRunner.Run(this, tickHandler, lines, args);

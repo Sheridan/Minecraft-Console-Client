@@ -4,20 +4,26 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace MinecraftClient.ChatBots
+namespace MinecraftClient.Bots
 {
     /// <summary>
     /// This bot make the console beep on some specified words. Useful to detect when someone is talking to you, for example.
     /// </summary>
-    public class Alerts : ChatBot
+	public class Alerts : Bot.Bot
     {
         private string[] dictionary = new string[0];
         private string[] excludelist = new string[0];
 
+		public Alerts()
+		{
+			onInitialize += Initialize;
+			onTextRecieved += GetText;
+		}
+
         /// <summary>
         /// Intitialize the Alerts bot
         /// </summary>
-        public override void Initialize()
+        private void Initialize()
         {
             dictionary = LoadDistinctEntriesFromFile(Settings.Alerts_MatchesFile);
             excludelist = LoadDistinctEntriesFromFile(Settings.Alerts_ExcludesFile);
@@ -27,7 +33,7 @@ namespace MinecraftClient.ChatBots
         /// Process text received from the server to display alerts
         /// </summary>
         /// <param name="text">Received text</param>
-        public override void GetText(string text)
+        public void GetText(string text)
         {
             //Remove color codes and convert to lowercase
             text = GetVerbatim(text).ToLower();

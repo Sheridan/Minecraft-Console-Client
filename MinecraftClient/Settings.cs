@@ -82,7 +82,7 @@ namespace MinecraftClient
         public static bool ChatLog_Enabled = false;
         public static bool ChatLog_DateTime = true;
         public static string ChatLog_File = "chatlog.txt";
-        public static ChatBots.ChatLog.MessageFilter ChatLog_Filter = ChatBots.ChatLog.MessageFilter.AllMessages;
+		public static MinecraftClient.Bots.ChatLog.MessageFilter ChatLog_Filter = MinecraftClient.Bots.ChatLog.MessageFilter.AllMessages;
 
         //PlayerListLog Settings
         public static bool PlayerLog_Enabled = false;
@@ -136,7 +136,9 @@ namespace MinecraftClient
                     ParseMode pMode = ParseMode.Default;
                     foreach (string lineRAW in Lines)
                     {
-                        string line = lineRAW.Split('#')[0].Trim();
+						
+						string line = lineRAW.Length > 8 && lineRAW.Substring(0, 8) == "password" ? lineRAW.Trim() : lineRAW.Split('#')[0].Trim();
+						Console.WriteLine(line);
                         if (line.Length > 0)
                         {
                             if (line[0] == '[' && line[line.Length - 1] == ']')
@@ -295,7 +297,7 @@ namespace MinecraftClient
                                             {
                                                 case "enabled": ChatLog_Enabled = str2bool(argValue); break;
                                                 case "timestamps": ChatLog_DateTime = str2bool(argValue); break;
-                                                case "filter": ChatLog_Filter = ChatBots.ChatLog.str2filter(argValue); break;
+                                                case "filter": ChatLog_Filter = MinecraftClient.Bots.ChatLog.str2filter(argValue); break;
                                                 case "logfile": ChatLog_File = argValue; break;
                                             }
                                             break;
