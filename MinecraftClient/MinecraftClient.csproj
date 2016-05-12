@@ -168,6 +168,11 @@
     <Compile Include="Bot\Chat.cs" />
     <Compile Include="Bot\WorldInteraction.cs" />
     <Compile Include="Bot\Events.cs" />
+    <Compile Include="Bot\Log.cs" />
+    <Compile Include="Bot\PluginChannel.cs" />
+    <Compile Include="Bot\Movement.cs" />
+    <Compile Include="Bot\ServerCommands.cs" />
+    <Compile Include="Bot\InternalCommands.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
