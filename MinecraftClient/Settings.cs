@@ -138,7 +138,6 @@ namespace MinecraftClient
                     {
 						
 						string line = lineRAW.Length > 8 && lineRAW.Substring(0, 8) == "password" ? lineRAW.Trim() : lineRAW.Split('#')[0].Trim();
-						Console.WriteLine(line);
                         if (line.Length > 0)
                         {
                             if (line[0] == '[' && line[line.Length - 1] == ']')
