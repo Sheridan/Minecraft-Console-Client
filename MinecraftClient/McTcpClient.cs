@@ -40,15 +40,16 @@ namespace MinecraftClient
         }
 		public void BotUnLoad(Bot.Bot b) 
 		{
-			b.doDestroy ();
-            bots.RemoveAll(item => object.ReferenceEquals(item, b));
+			if (bots.RemoveAll (item => object.ReferenceEquals (item, b)) > 0) 
+			{
 
-            // ToList is needed to avoid an InvalidOperationException from modfiying the list while it's being iterated upon.
-            var botRegistrations = registeredBotPluginChannels.Where(entry => entry.Value.Contains(b)).ToList();
-            foreach (var entry in botRegistrations)
-            {
-                UnregisterPluginChannel(entry.Key, b);
-            }
+				// ToList is needed to avoid an InvalidOperationException from modfiying the list while it's being iterated upon.
+				var botRegistrations = registeredBotPluginChannels.Where (entry => entry.Value.Contains (b)).ToList ();
+				foreach (var entry in botRegistrations) {
+					UnregisterPluginChannel (entry.Key, b);
+				}
+				b.doDestroy ();
+			}
         }
         public void BotClear() { bots.Clear(); }
 
