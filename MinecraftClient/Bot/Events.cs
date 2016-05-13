@@ -21,6 +21,13 @@ namespace MinecraftClient.Bot
 		public void doInitialize() { if(hasInitializeHandlers()) { onInitialize(); } }
 
 		/// <summary>
+		/// Anything you want to before destroy your bot, will be called on destroy
+		/// </summary>
+		public event DSimple onDestroy;
+		public bool hasDestroyHandlers()	{ return onDestroy != null; }
+		public void doDestroy() { if(hasDestroyHandlers()) { onDestroy(); } }
+
+		/// <summary>
 		/// Called after the server has been joined successfully and chat messages are able to be sent.
 		///
 		/// NOTE: This is not always right after joining the server - if the bot was loaded after logging

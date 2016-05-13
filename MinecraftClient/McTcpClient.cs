@@ -40,6 +40,7 @@ namespace MinecraftClient
         }
 		public void BotUnLoad(Bot.Bot b) 
 		{
+			b.doDestroy ();
             bots.RemoveAll(item => object.ReferenceEquals(item, b));
 
             // ToList is needed to avoid an InvalidOperationException from modfiying the list while it's being iterated upon.
